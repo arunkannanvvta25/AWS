@@ -6,8 +6,8 @@ const randomBytes = promisify(crypto.randomBytes)
 
 dotenv.config()
 
-const region = ""
-const bucketName = ""
+const region = "us-east-2"
+const bucketName = "fovus-file-upload"
 const accessKeyId = process.env.AWS_ACCESS_KEY_ID
 const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
 
@@ -20,11 +20,11 @@ const s3 = new aws.S3({
 
 export async function generateUploadURL() {
   const rawBytes = await randomBytes(16)
-  const imageName = rawBytes.toString('hex')
+  const fileName = rawBytes.toString('hex')
 
   const params = ({
     Bucket: bucketName,
-    Key: imageName,
+    Key: fileName,
     Expires: 60
   })
   
