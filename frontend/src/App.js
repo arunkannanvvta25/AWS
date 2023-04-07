@@ -46,6 +46,8 @@ handleClick = async () => {
       },
       body: file
     })
+    const imageUrl = url.split('?')[0]
+  console.log(imageUrl)
 }
 
   render() {
