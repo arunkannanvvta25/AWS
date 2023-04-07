@@ -7,6 +7,8 @@ exports.handler = async function (event, context, callback) {
     const ddb= new AWS.DynamoDB({apiVersion:"2012-10-08"});
     const documentClient = new AWS.DynamoDB.DocumentClient({region:"us-east-2"});
     
+    let resonseBody="";
+    let statusCode=0;
     
 const params = {
   TableName: 'FileTable',
@@ -17,18 +19,20 @@ const params = {
 
 try{
   const data = await documentClient.get(params).promise();
-  console.log(data);
+  resonseBody=JSON.stringify(data.Item);
+  statusCode=200;
 }
 catch(err){
-  console.log(err);
+  resonseBody="Failed";
+  statusCode=403;
 }
 
-// Call DynamoDB to retrieve the item
-// ddb.getItem(params, (err, data) => {
-//   if (err) {
-//     console.log('Error', err);
-//   } else {
-//     console.log('Success', data.Item);
-//   }
-// });
+const response= {
+  statusCode: statusCode,
+  header:{
+    'myheader':"test"
+  },
+  body:resonseBody
+}
+return response;
 }

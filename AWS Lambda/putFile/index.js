@@ -6,22 +6,35 @@ const dynamodbClient = new AWS.DynamoDB.DocumentClient();
     AWS.config.update({
         region:  "us-east-2",
     });
-
+    let resonseBody="";
+    let statusCode=0;
+    const {id,input_file,input_text} = JSON.parse(event.body)
     let putRequest = {
         TableName: 'FileTable',
         Item: {
-            "id": event.body.id,
-            "input_file":event.body.input_file,
-            "input_text":event.body.input_text
+            "id": id,
+            "input_file":input_file,
+            "input_text":input_text
         }
     };
-
+    
     await dynamodbClient.put(putRequest).promise()
     .then((data) => {
-        console.info('successfully update to dynamodb', data)
+        resonseBody=JSON.stringify(data);
+        statusCode=201;
     })
     .catch((err) => {
-        console.info('failed adding data dynamodb', err)
+        resonseBody="Failed "+err;
+        statusCode=403;
     });
+    
+    const response= {
+  statusCode: statusCode,
+  header:{
+    'myheader':"test"
+  },
+  body:resonseBody
+}
+return response;
 
 };
