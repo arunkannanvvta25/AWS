@@ -2,6 +2,7 @@ import React from "react";
 import './App.css';
 //import dotenv from 'dotenv'
 import AWS from 'aws-sdk'
+import data from './secretKey';
 
 //dotenv.config()
 
@@ -17,10 +18,10 @@ handleClick = async () => {
 
   AWS.config.region = 'us-east-2';  
   const bucketName = 'fovus-file-upload';
-  const accessKeyId = process.env.REACT_APP_AWS_ACCESS_KEY_ID
-  const secretAccessKey = process.env.REACT_APP_AWS_SECRET_ACCESS_KEY  
+  const accessKeyId = data.REACT_APP_AWS_ACCESS_KEY_ID
+  const secretAccessKey = data.REACT_APP_AWS_SECRET_ACCESS_KEY  
   AWS.config.credentials = new AWS.Credentials(accessKeyId, secretAccessKey);
-  
+
   const s3 = new AWS.S3();
   const url = await new Promise((resolve, reject) => {
       s3.getSignedUrl('putObject', {
