@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /backend/.env
 /backend/.env
+/frontend/src/.env
