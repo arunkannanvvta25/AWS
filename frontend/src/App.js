@@ -10,8 +10,13 @@ class App extends React.Component {
   handleClick = async () => {
     const fileInput = document.querySelector("#fileInput")
     const file = fileInput.files[0]
+    const fileName= file.name
   // get secure url from our server
-  const { url } = await fetch("http://localhost:8080/s3url").then(res => res.json())
+  const { url } = await fetch("http://localhost:8080/s3url", {
+    method: "POST",
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({  "fileName":fileName  })
+  }).then(res => res.json())
   console.log(url)
 
   // post the image direclty to the s3 bucket
@@ -29,9 +34,7 @@ class App extends React.Component {
   // post requst to my server to store any extra data
   
   
-  const img = document.createElement("img")
-  img.src = imageUrl
-  document.body.appendChild(img)
+  
 }
 
   render() {
@@ -39,7 +42,7 @@ class App extends React.Component {
       <div className="App">
       <div className="fileUploadDiv">
       <label className="Inputlabel">Text Input:</label>
-      <input type="text"></input>
+      <input type="text" id="fileName"></input>
       <br></br>
       <label className="Inputlabel">File Input:</label>
       <input id="fileInput" type="file" ></input>
