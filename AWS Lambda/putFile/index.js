@@ -1,28 +1,27 @@
 const AWS = require('aws-sdk');
+const dynamodbClient = new AWS.DynamoDB.DocumentClient();
 
-const dynamoDB = new AWS.DynamoDB.DocumentClient();
+ exports.handler = async (event, context, callback) => {
 
-exports.handler = async (event, context) => {
-  const params = {
-    TableName: 'FileTable',
-    Item: {
-      id: 123,
-      input_text: "abcd",
-      input_file:"efgh"
-    }
-  };
+    AWS.config.update({
+        region:  "us-east-2",
+    });
 
-  try {
-    await dynamoDB.put(params).promise();
-    return {
-      statusCode: 200,
-      body: JSON.stringify('Record inserted successfully.')
+    let putRequest = {
+        TableName: 'FileTable',
+        Item: {
+            "id": event.body.id,
+            "input_file":event.body.input_file,
+            "input_text":event.body.input_text
+        }
     };
-  } catch (error) {
-    console.error(error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify('Error inserting record.')
-    };
-  }
+
+    await dynamodbClient.put(putRequest).promise()
+    .then((data) => {
+        console.info('successfully update to dynamodb', data)
+    })
+    .catch((err) => {
+        console.info('failed adding data dynamodb', err)
+    });
+
 };

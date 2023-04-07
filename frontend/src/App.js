@@ -3,6 +3,7 @@ import './App.css';
 //import dotenv from 'dotenv'
 import AWS from 'aws-sdk'
 import data from './secretKey';
+import { nanoid } from 'nanoid'
 
 //dotenv.config()
 
@@ -48,6 +49,8 @@ handleClick = async () => {
     })
     const imageUrl = url.split('?')[0]
   console.log(imageUrl)
+  var ID = nanoid();
+  console.log(ID);
 }
 
   render() {
