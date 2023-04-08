@@ -15,6 +15,7 @@ class App extends React.Component {
 
 handleClick = async () => {  
   const file = document.querySelector("#fileInput").files[0]
+  const input_text=document.getElementById('input_text').value;
   const fileName= file.name;  
 
   AWS.config.region = 'us-east-2';  
@@ -47,10 +48,24 @@ handleClick = async () => {
       },
       body: file
     })
-    const imageUrl = url.split('?')[0]
-  console.log(imageUrl)
-  var ID = nanoid();
-  console.log(ID);
+    const fileURL = url.split('?')[0]
+  console.log(fileURL)
+  const FileTableItem={
+    id:nanoid(),
+    input_file:fileURL,
+    input_text:input_text
+  }
+  
+  const putFileURL="https://v6h735rq5l.execute-api.us-east-2.amazonaws.com/putFile";
+  await fetch(putFileURL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(FileTableItem)
+  })
+  console.log("done")
+  
 }
 
   render() {
@@ -58,7 +73,7 @@ handleClick = async () => {
       <div className="App">
       <div className="fileUploadDiv">
       <label className="Inputlabel">Text Input:</label>
-      <input type="text" id="fileName"></input>
+      <input type="text" id="input_text"></input>
       <br></br>
       <label className="Inputlabel">File Input:</label>
       <input id="fileInput" type="file" ></input>
